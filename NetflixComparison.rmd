@@ -1,0 +1,43 @@
+---
+title: "Netflix Siblings"
+author: "Taylor Blair"
+date: "1/26/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#A brief intro 
+
+My sister and I have a long history of watching Netflix.
+
+There are some minor outliers in the datasets, namely when we 
+
+#Loading data
+
+
+```{r}
+library(readr)
+library(tibble)
+
+
+```
+
+```{r cars}
+
+my_history <- read_csv("Coding/R/sis-and-me-netflix/MyNetflixHistory.csv")
+sibling_history <- read_csv("Coding/R/sis-and-me-netflix/SisNetflixHistory.csv")
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

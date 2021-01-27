@@ -18,15 +18,15 @@ There are some minor outliers in the datasets, namely when we use each others ac
 #Loading data and libraries
 
 
-```{r, warning=FALSE, error=FALSE, results="hide"}
+```{r, warning=FALSE, error=FALSE, results="hide",}
 library(tidyverse)
 library(openair)
 library(readr)
 ```
 
 ```{r}
-my_history <- read_csv("MyNetflixHistory.csv")
-sibling_history <- read_csv("SisNetflixHistory.csv")
+my_history <- read_csv("~/Coding/R/sis-and-me-netflix/MyNetflixHistory.csv")
+sibling_history <- read_csv("~/Coding/R/sis-and-me-netflix/SisNetflixHistory.csv")
 
 ```
 
@@ -59,8 +59,7 @@ sibling_history$type <- sibling_history$type %>%
 
 ##Series, Season and episode
 
-```{r}
-
+```{r, warning=FALSE, error=FALSE, results="hide"}
 my_history <- my_history %>%
   separate(Title,
            c("Series", "Season", "Episode"),
@@ -78,10 +77,18 @@ sibling_history <- sibling_history %>%
 ```{r}
 day_of_week <- function(x){
   return (weekdays(x))
-  }
+}
+
+days <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
 my_history$day <- sapply(my_history$Date, day_of_week)
+my_history$day <- factor(my_history$day, 
+                         levels = days)
+
 sibling_history$day <- sapply(sibling_history$Date, day_of_week)
+sibling_history$day <- factor(sibling_history$day, 
+                              levels = days)
+
 
 ```
 
@@ -101,7 +108,7 @@ merged <- rbind(my_history, sibling_history)
 #Numerical analysis
 
 
-
+##Binge Watch pisodes
 ```{r}
 
 ```
@@ -109,11 +116,15 @@ merged <- rbind(my_history, sibling_history)
 
 #Graphical Analysis
 
-```{r}
+Looking at 
 
+```{r}
 ggplot(merged, aes(x = day, fill=individual) ) +
   geom_bar(position = "dodge") +
-  labs("Sis v. Tay: Netflix shows watched by day")
+  labs(title = "Sis v. Tay: Netflix Shows Watched by Day") +
+  scale_fill_manual("Individual", values=c("#E50914","#221F1F")) +
+  xlab("Day of Week") +
+  ylab("Number of Episodes Watched")
 
 ```
 

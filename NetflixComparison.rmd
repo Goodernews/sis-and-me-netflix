@@ -4,6 +4,16 @@ author: "Taylor Blair"
 date: "1/26/2021"
 output: pdf_document
 urlcolor: blue
+knit: (
+  function(inputFile, encoding) { 
+
+    pSubTitle <- 'Knitted Comparison'
+
+    rmarkdown::render( 
+      input       = inputFile, 
+      encoding    = encoding, 
+      params      = list(sub_title = pSubTitle),      
+      output_file = pSubTitle) })
 ---
 
 ```{r setup, include=FALSE, warning=FALSE}
@@ -30,8 +40,8 @@ library(readr)
 ```
 
 ```{r message=FALSE}
-my_history <- read_csv("~/Coding/R/sis-and-me-netflix/MyNetflixHistory.csv")
-sibling_history <- read_csv("~/Coding/R/sis-and-me-netflix/SisNetflixHistory.csv")
+my_history <- read_csv("~/Coding/R/sis-and-me-netflix/Data/MyNetflixHistory.csv")
+sibling_history <- read_csv("~/Coding/R/sis-and-me-netflix/Data/SisNetflixHistory.csv")
 
 sample_n(my_history, 4)
 

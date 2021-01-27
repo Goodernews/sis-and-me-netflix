@@ -3,47 +3,55 @@ title: "Netflix Siblings"
 author: "Taylor Blair"
 date: "1/26/2021"
 output: pdf_document
+urlcolor: blue
 ---
 
 ```{r setup, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#A brief intro 
+# A brief intro 
 
 My sister and I have a long history of watching Netflix.
 
 There are some minor outliers in the datasets, namely when we use each others accounts.
 
-#Loading data and libraries
+*If you would like to create your own version of this dataset, or find your Netflix history go to:* [https://www.netflix.com/YourAccount](https://www.netflix.com/YourAccount)
+
+*From there, select the specific profile* $\boldsymbol{\Rightarrow}$ **Viewing Activity** $\boldsymbol{\Rightarrow}$ **Download All**
+
+# Loading Libraries and Data
 
 
-```{r, warning=FALSE, error=FALSE, results="hide",}
+```{r, warning=FALSE, error=FALSE, results="hide", message=FALSE}
 library(tidyverse)
 library(openair)
 library(readr)
 ```
 
-```{r}
+```{r message=FALSE}
 my_history <- read_csv("~/Coding/R/sis-and-me-netflix/MyNetflixHistory.csv")
 sibling_history <- read_csv("~/Coding/R/sis-and-me-netflix/SisNetflixHistory.csv")
 
+sample_n(my_history, 4)
+
 ```
 
-#Data prep
+---
 
-##Date fixing
+# Data Prep
+
+As can be seen above, the initial dataset contains only two variables. 
+
+## Date fixing
 ```{r}
-
-
 my_history$Date <- as.Date(my_history$Date,"%m/%d/%y")
 sibling_history$Date <- as.Date(sibling_history$Date,"%m/%d/%y")
 
-
 ```
 
 
-##Movie or TV series
+## Movie or TV series
 ```{r}
 my_history$type <- grepl(":", my_history$Title)
 my_history$type <- my_history$type %>%
@@ -57,7 +65,7 @@ sibling_history$type <- sibling_history$type %>%
 
 ```
 
-##Series, Season and episode
+## Series, Season and episode
 
 ```{r, warning=FALSE, error=FALSE, results="hide"}
 my_history <- my_history %>%
@@ -73,7 +81,8 @@ sibling_history <- sibling_history %>%
 ```
 
 
-#Day of Week
+## Day of Week
+Using
 ```{r}
 day_of_week <- function(x){
   return (weekdays(x))
@@ -92,10 +101,18 @@ sibling_history$day <- factor(sibling_history$day,
 
 ```
 
+## Outputted Tibble
+
+```{r}
+sample_n(my_history, 4)
+
+```
+
+---
+
 #Compare dataset
 
 ```{r}
-
 my_history$individual <- "Tay"
 sibling_history$individual <- "Sis"
 
@@ -105,14 +122,20 @@ merged <- rbind(my_history, sibling_history)
 
 ```
 
-#Numerical analysis
+---
+
+# Numerical analysis
 
 
-##Binge Watch pisodes
+## Binge Watching
+
+Who hasn't binge watched Netflix before
+
 ```{r}
 
 ```
 
+---
 
 #Graphical Analysis
 
@@ -128,6 +151,9 @@ ggplot(merged, aes(x = day, fill=individual) ) +
 
 ```
 
+## A Calander of Events
+
+2020 was a unique year, with lockdown beginning in February...
 
 ```{r}
 

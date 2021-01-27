@@ -10,7 +10,7 @@ urlcolor: blue
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# A brief intro 
+# Background
 
 My sister and I have a long history of watching Netflix.
 
@@ -137,7 +137,7 @@ Who hasn't binge watched Netflix before
 
 ---
 
-#Graphical Analysis
+# Graphical Analysis
 
 Looking at 
 

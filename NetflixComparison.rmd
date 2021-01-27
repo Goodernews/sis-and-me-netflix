@@ -5,7 +5,7 @@ date: "1/26/2021"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -13,31 +13,127 @@ knitr::opts_chunk$set(echo = TRUE)
 
 My sister and I have a long history of watching Netflix.
 
-There are some minor outliers in the datasets, namely when we 
+There are some minor outliers in the datasets, namely when we use each others accounts.
 
-#Loading data
+#Loading data and libraries
+
+
+```{r, warning=FALSE, error=FALSE, results="hide"}
+library(tidyverse)
+library(openair)
+library(readr)
+```
+
+```{r}
+my_history <- read_csv("MyNetflixHistory.csv")
+sibling_history <- read_csv("SisNetflixHistory.csv")
+
+```
+
+#Data prep
+
+##Date fixing
+```{r}
+
+
+my_history$Date <- as.Date(my_history$Date,"%m/%d/%y")
+sibling_history$Date <- as.Date(sibling_history$Date,"%m/%d/%y")
+
+
+```
+
+
+##Movie or TV series
+```{r}
+my_history$type <- grepl(":", my_history$Title)
+my_history$type <- my_history$type %>%
+  replace(my_history$type==TRUE, "TV Series") %>%
+  replace(my_history$type==FALSE, "Movie")
+
+sibling_history$type <- grepl(":", sibling_history$Title)
+sibling_history$type <- sibling_history$type %>%
+  replace(sibling_history$type==TRUE, "TV Series") %>%
+  replace(sibling_history$type==FALSE, "Movie")
+
+```
+
+##Series, Season and episode
+
+```{r}
+
+my_history <- my_history %>%
+  separate(Title,
+           c("Series", "Season", "Episode"),
+           ": ")
+
+sibling_history <- sibling_history %>%
+  separate(Title,
+           c("Series", "Season", "Episode"),
+           ": ")
+
+```
+
+
+#Day of Week
+```{r}
+day_of_week <- function(x){
+  return (weekdays(x))
+  }
+
+my_history$day <- sapply(my_history$Date, day_of_week)
+sibling_history$day <- sapply(sibling_history$Date, day_of_week)
+
+```
+
+#Compare dataset
+
+```{r}
+
+my_history$individual <- "Tay"
+sibling_history$individual <- "Sis"
+
+merged <- rbind(my_history, sibling_history)
+
+
+
+```
+
+#Numerical analysis
+
 
 
 ```{r}
-library(readr)
-library(tibble)
-
 
 ```
 
-```{r cars}
 
-my_history <- read_csv("Coding/R/sis-and-me-netflix/MyNetflixHistory.csv")
-sibling_history <- read_csv("Coding/R/sis-and-me-netflix/SisNetflixHistory.csv")
+#Graphical Analysis
+
+```{r}
+
+ggplot(merged, aes(x = day, fill=individual) ) +
+  geom_bar(position = "dodge") +
+  labs("Sis v. Tay: Netflix shows watched by day")
 
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+```{r}
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+my_history %>%
+  group_by(Date) %>%
+  summarise(count = n()) %>%
+  rename(date=Date) %>%
+  calendarPlot(pollutant = "count",
+             year = 2020)
+
+sibling_history %>%
+  group_by(Date) %>%
+  summarise(count = n()) %>%
+  rename(date=Date) %>%
+  calendarPlot(pollutant = "count",
+              year = 2020,
+              month = c(1:12))
+
+
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

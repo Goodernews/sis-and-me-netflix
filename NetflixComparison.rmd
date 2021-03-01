@@ -129,7 +129,6 @@ sibling_history$individual <- "Sis"
 merged <- rbind(my_history, sibling_history)
 
 
-
 ```
 
 ---
@@ -172,7 +171,7 @@ my_history %>%
   summarise(count = n()) %>%
   rename(date=Date) %>%
   calendarPlot(pollutant = "count",
-             year = 2020)
+             year = 2020, main="Netflix Episodes watched in 2020")
 
 sibling_history %>%
   group_by(Date) %>%
